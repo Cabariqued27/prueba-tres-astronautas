@@ -32,7 +32,7 @@ class PlanetDetailScreen extends ConsumerWidget {
           context,
           ref,
           planet,
-          imageHeightRatio: 0.4,
+          imageHeightRatio: 0.3,
           isFavorite: isFavorite,
         ),
       ),
@@ -47,7 +47,7 @@ class PlanetDetailScreen extends ConsumerWidget {
   ) {
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = screenWidth * 0.05;
-
+    final baseFontSize = (screenWidth * 0.04).clamp(12.0, 20.0); 
     return SingleChildScrollView(
       padding: EdgeInsets.all(padding),
       child: Column(
@@ -60,7 +60,7 @@ class PlanetDetailScreen extends ConsumerWidget {
             ref,
             planet,
             isFavorite,
-            baseFontSize: screenWidth * 0.04,
+            baseFontSize: baseFontSize,
           ),
         ],
       ),
@@ -68,46 +68,46 @@ class PlanetDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildSideBySideView(
-    BuildContext context,
-    WidgetRef ref,
-    Planet planet, {
-    required double imageHeightRatio,
-    required bool isFavorite,
-  }) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final padding = screenWidth * 0.05;
-    final spacing = screenWidth * 0.05;
-    final imageHeight = screenWidth * imageHeightRatio;
+  BuildContext context,
+  WidgetRef ref,
+  Planet planet, {
+  required double imageHeightRatio,
+  required bool isFavorite,
+}) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final padding = screenWidth * 0.05;
+  final spacing = screenWidth * 0.05;
+  final imageHeight = screenWidth * imageHeightRatio;
+  final baseFontSize = (screenWidth * 0.035).clamp(12.0, 18.0);
 
-    return Padding(
-      padding: EdgeInsets.all(padding),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: _PlanetHeader(planet: planet, imageHeight: imageHeight),
-          ),
-          SizedBox(width: spacing),
-          Expanded(
-            flex: 3,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _buildPlanetDetails(
-                  context,
-                  ref,
-                  planet,
-                  isFavorite,
-                  baseFontSize: screenWidth * 0.035,
-                ),
-              ),
+  return SingleChildScrollView( 
+    padding: EdgeInsets.all(padding),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: _PlanetHeader(planet: planet, imageHeight: imageHeight),
+        ),
+        SizedBox(width: spacing),
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _buildPlanetDetails(
+              context,
+              ref,
+              planet,
+              isFavorite,
+              baseFontSize: baseFontSize,
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   List<Widget> _buildPlanetDetails(
     BuildContext context,
@@ -129,16 +129,16 @@ class PlanetDetailScreen extends ConsumerWidget {
     Widget dataChip(String label, String value) {
       return Container(
         padding: EdgeInsets.symmetric(
-          horizontal: baseFontSize * 0.8,
-          vertical: baseFontSize * 0.5,
+          horizontal: baseFontSize * 0.5, 
+          vertical: baseFontSize * 0.3,  
         ),
         margin: EdgeInsets.symmetric(
-          horizontal: baseFontSize * 0.4,
-          vertical: baseFontSize * 0.6,
+          horizontal: baseFontSize * 0.3, 
+          vertical: baseFontSize * 0.4,   
         ),
         decoration: BoxDecoration(
           color: Colors.blue.shade50,
-          borderRadius: BorderRadius.circular(baseFontSize * 1.2),
+          borderRadius: BorderRadius.circular(baseFontSize),
           boxShadow: [
             BoxShadow(
               color: Colors.blue.shade300,
@@ -230,8 +230,8 @@ class PlanetDetailScreen extends ConsumerWidget {
           backgroundColor: Colors.blue.shade600,
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(
-            horizontal: baseFontSize * 4,
-            vertical: baseFontSize * 1.2,
+            horizontal: baseFontSize * 3,
+            vertical: baseFontSize,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
