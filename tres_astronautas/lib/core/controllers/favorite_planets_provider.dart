@@ -3,8 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 final favoritePlanetsProvider =
     StateNotifierProvider<FavoritesNotifier, Set<String>>((ref) {
-  return FavoritesNotifier();
-});
+      return FavoritesNotifier();
+    });
 
 class FavoritesNotifier extends StateNotifier<Set<String>> {
   static const boxName = 'favorites';
