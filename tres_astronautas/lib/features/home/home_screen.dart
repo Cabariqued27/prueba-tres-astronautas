@@ -47,7 +47,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           const Text('Medium View (Tablet Portrait)'),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => context.push('/planets'),
+            onPressed: () =>context.go('/planets'), // cambia la ruta y reemplaza la actual
+
             child: const Text('Ver Planetas'),
           ),
         ],

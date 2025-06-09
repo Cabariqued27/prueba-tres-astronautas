@@ -1,25 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tres_astronautas/core/controllers/favorite_planets_provider.dart';
 import 'package:tres_astronautas/data/models/models_planets.dart';
-import 'package:tres_astronautas/utils/responsive_design.dart';
+import 'package:tres_astronautas/utils/responsive_design.dart'; 
 
-class PlanetDetailScreen extends StatelessWidget {
+class PlanetDetailScreen extends ConsumerWidget {
   final Planet planet;
 
   const PlanetDetailScreen({super.key, required this.planet});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favorites = ref.watch(favoritePlanetsProvider);
+    final isFavorite = favorites.contains(planet.name);
+
     return Scaffold(
       appBar: AppBar(title: Text(planet.name ?? '')),
       body: Resizer(
-        compact: _buildCompactView(planet),
-        medium: _buildSideBySideView(planet, imageHeight: double.infinity),
-        expanded: _buildSideBySideView(planet, imageHeight: 300),
+        compact: _buildCompactView(ref, planet, isFavorite),
+        medium: _buildSideBySideView(
+          ref,
+          planet,
+          imageHeight: double.infinity,
+          isFavorite: isFavorite,
+        ),
+        expanded: _buildSideBySideView(
+          ref,
+          planet,
+          imageHeight: 300,
+          isFavorite: isFavorite,
+        ),
       ),
     );
   }
 
-  Widget _buildCompactView(Planet planet) {
+  Widget _buildCompactView(WidgetRef ref, Planet planet, bool isFavorite) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -27,13 +42,18 @@ class PlanetDetailScreen extends StatelessWidget {
         children: [
           _PlanetHeader(planet: planet, imageHeight: 200),
           const SizedBox(height: 16),
-          ..._buildPlanetDetails(planet),
+          ..._buildPlanetDetails(ref, planet, isFavorite),
         ],
       ),
     );
   }
 
-  Widget _buildSideBySideView(Planet planet, {required double imageHeight}) {
+  Widget _buildSideBySideView(
+    WidgetRef ref,
+    Planet planet, {
+    required double imageHeight,
+    required bool isFavorite,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Row(
@@ -49,7 +69,7 @@ class PlanetDetailScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: _buildPlanetDetails(planet),
+                children: _buildPlanetDetails(ref, planet, isFavorite),
               ),
             ),
           ),
@@ -58,7 +78,11 @@ class PlanetDetailScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildPlanetDetails(Planet planet) {
+  List<Widget> _buildPlanetDetails(
+    WidgetRef ref,
+    Planet planet,
+    bool isFavorite,
+  ) {
     return [
       const SizedBox(height: 16),
       Text(planet.description ?? ''),
@@ -83,10 +107,14 @@ class PlanetDetailScreen extends StatelessWidget {
       const SizedBox(height: 24),
       ElevatedButton.icon(
         onPressed: () {
-          // TODO: lógica para marcar como favorito
+          ref
+              .read(favoritePlanetsProvider.notifier)
+              .toggleFavorite(planet.name ?? '');
         },
-        icon: const Icon(Icons.favorite_border),
-        label: const Text('Marcar como favorito'),
+        icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+        label: Text(
+          isFavorite ? 'Quitar de favoritos' : 'Marcar como favorito',
+        ),
       ),
     ];
   }
@@ -109,7 +137,7 @@ class _PlanetHeader extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Image.network(
-          planet.image??'',
+          planet.image ?? '',
           height: imageHeight,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) =>
