@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:tres_astronautas/data/models/models_planets.dart';
+import 'package:tres_astronautas/data/models/planet_model.dart';
 
 class PlanetApi {
   static Future<List<Planet>> fetchPlanets() async {

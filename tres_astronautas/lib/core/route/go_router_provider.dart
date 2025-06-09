@@ -5,7 +5,7 @@ import 'package:tres_astronautas/features/home/home_screen.dart';
 import 'package:tres_astronautas/features/home/not_found_screen.dart';
 import 'package:tres_astronautas/features/planets/presentation/planet_detail_screen.dart';
 import 'package:tres_astronautas/features/planets/presentation/planet_list_screen.dart';
-import 'package:tres_astronautas/data/models/models_planets.dart';
+import 'package:tres_astronautas/data/models/planet_model.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
